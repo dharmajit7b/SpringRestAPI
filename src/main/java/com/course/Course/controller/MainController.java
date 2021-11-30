@@ -3,9 +3,12 @@ package com.course.Course.controller;
 import com.course.Course.entities.Course;
 import com.course.Course.services.CourseSevises;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MainController {
@@ -23,9 +26,13 @@ public class MainController {
 	
 //	get the course 
 	@GetMapping("/courses")
-	public List<Course>getCourses(){
+	public ResponseEntity<List<Course>> getCourses(){
 //		called service panel 
-		return this.courseSevice.getCourses();
+		 List<Course> list=this.courseSevice.getCourses();
+		 if(list.size()<=0){
+		 	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		 }
+		 return ResponseEntity.of(Optional.of(list));
 	}
 
 //	get course by ID
